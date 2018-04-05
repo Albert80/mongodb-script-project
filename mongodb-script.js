@@ -4,7 +4,7 @@
 
 const mongodb = require('mongodb')
 
-
+// Insert documents
 const insertDocs = (db, callback) => {
 	// Get reference to edx-course-docs collection
 	const collection = db.collection('edx-course-students')
@@ -20,15 +20,67 @@ const insertDocs = (db, callback) => {
 	})
 }
 
+// Updating Documents
+const updateDoc = (db, callback) => {
+	// Get the edx-course-students collection
+	var collection = db.collection('edx-course-students')
+	// Update document where a is 2, set b equal to 1
+	const name = 'Peter'
+	collection.update({ name : name }, { $set: { grade : 'A' } }, (error, result) => {
+		if (error) return process.exit(1)
+		console.log(result.result.n) // Will be 1
+		console.log(`Updated the student document where name = ${name}`)
+		callback(result)
+	})
+}
 
+// Removing Documents
+const removeDoc = (db, callback) => {
+	// Get the documents collection
+	const collection = db.collection('edx-course-students')
+	// Insert some documents
+	const name = 'Bob'
+	collection.remove( {name : name }, (error, result) => {
+		if (error) return process.exit(1)
+		console.log(result.result.n) //will be 1
+		console.log(`Removed the document where name = ${name}`)
+		callback(result)
+	})
+}
+
+// Finding Documents
+var findDocs = (db, callback) => {
+	// Get the documents collection
+	var collection = db.collection('edx-course-students')
+	// Find some documents
+	collection.find({}).toArray((error, docs) => {
+		if (error) return process.exit(1)
+		console.log(2, docs.length) // will be 2 because we removed one document
+		console.log(`Found the following documents:`)
+		console.dir(docs)
+		callback(docs)
+	})
+}
+// ------------------------------------------------------------------------------------------
+// Main
 const MongoClient = mongodb.MongoClient
+
+
 // Connection URI
 const url = 'mongodb://localhost:27017/edx-course-db'
-// USe connect method to connect to the server
+// Use connect method to connect to the server
 MongoClient.connect(url, (err, db) => {
 	if (err) return process.exit(1)
 	console.log('Kudos. Connected successfully to server')
 	insertDocs(db, () => {
-		db.close()
+		updateDoc(db, () => {
+			removeDoc(db, () => {
+				findDocs(db, () => {
+					db.close()
+				})
+			})
+			
+		})
+		
 	})
 })

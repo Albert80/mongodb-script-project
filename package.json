@@ -1,0 +1,22 @@
+{
+  "name": "mongodb-script-project",
+  "version": "1.0.0",
+  "description": "\"First project using MongoDB\"",
+  "main": "mongodb-script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Albert80/mongodb-script-project.git"
+  },
+  "author": "César Alberto Trejo Juárez",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Albert80/mongodb-script-project/issues"
+  },
+  "homepage": "https://github.com/Albert80/mongodb-script-project#readme",
+  "dependencies": {
+    "mongodb": "^3.0.5"
+  }
+}

@@ -1,6 +1,7 @@
 // mongodb-script.js
 // Module 3 MongoDB
 // Introduction to nodejs: Microsoft
+// mongdb version 3.x
 
 const mongodb = require('mongodb')
 
@@ -23,7 +24,7 @@ const insertDocs = (db, callback) => {
 // Updating Documents
 const updateDoc = (db, callback) => {
 	// Get the edx-course-students collection
-	var collection = db.collection('edx-course-students')
+	const collection = db.collection('edx-course-students')
 	// Update document where a is 2, set b equal to 1
 	const name = 'Peter'
 	collection.update({ name : name }, { $set: { grade : 'A' } }, (error, result) => {
@@ -49,9 +50,9 @@ const removeDoc = (db, callback) => {
 }
 
 // Finding Documents
-var findDocs = (db, callback) => {
+const findDocs = (db, callback) => {
 	// Get the documents collection
-	var collection = db.collection('edx-course-students')
+	const collection = db.collection('edx-course-students')
 	// Find some documents
 	collection.find({}).toArray((error, docs) => {
 		if (error) return process.exit(1)
@@ -67,16 +68,18 @@ const MongoClient = mongodb.MongoClient
 
 
 // Connection URI
+// const url = 'mongodb://localhost:27017/edx-course-db' // for 2.x 
 const url = 'mongodb://localhost:27017/edx-course-db'
 // Use connect method to connect to the server
-MongoClient.connect(url, (err, db) => {
+MongoClient.connect(url, (err, client) => {
 	if (err) return process.exit(1)
+	var db = client.db('edx-course-db')
 	console.log('Kudos. Connected successfully to server')
 	insertDocs(db, () => {
 		updateDoc(db, () => {
 			removeDoc(db, () => {
 				findDocs(db, () => {
-					db.close()
+					client.close()
 				})
 			})
 			
